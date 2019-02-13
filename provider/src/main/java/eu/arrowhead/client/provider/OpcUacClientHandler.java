@@ -45,11 +45,13 @@ public class OpcUacClientHandler {
     private VariableNodeHandler createVariableHandler(NodeId nodeId) throws InterruptedException, ExecutionException{
             VariableNode node = client.getAddressSpace().createVariableNode(nodeId);
             NodeId dataTypeId = node.getDataType().get();
-            List<Node> typeNodes = client.getAddressSpace().browse(dataTypeId).get();
+			System.out.println("DATA TYPE: " + dataTypeId.toParseableString());
+            Node typeNode = client.getAddressSpace().createDataTypeNode(dataTypeId);
             String type = "undefined";
-            if(!typeNodes.isEmpty()){
-                type = typeNodes.get(0).getBrowseName().get().toString();
-            }
+			//System.out.println("Count: " + typeNodes.size());
+            //if(!typeNodes.isEmpty()){
+                type = typeNode.getBrowseName().get().getName();
+            //}
             return new VariableNodeHandler(node, type);
     }
     
