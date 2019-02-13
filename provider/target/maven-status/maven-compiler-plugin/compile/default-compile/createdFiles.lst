@@ -1,3 +1,4 @@
+eu\arrowhead\client\provider\OpcUacClientHandler.class
 eu\arrowhead\client\provider\OPCValueResource.class
 eu\arrowhead\client\provider\FullProviderMain.class
 eu\arrowhead\client\provider\OPCUAReader.class

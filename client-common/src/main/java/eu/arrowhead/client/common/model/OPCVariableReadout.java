@@ -13,6 +13,12 @@ public class OPCVariableReadout {
 
     private String value;
 
+    private long sourceTimestamp;
+
+    private long serverTimestamp;
+
+    private long statusCode;
+
     public String getType() {
         return type;
     }
@@ -28,4 +34,29 @@ public class OPCVariableReadout {
     public void setValue(String value) {
         this.value = value;
     }
+
+    public long getSourceTimestamp() {
+        return sourceTimestamp;
+    }
+
+    public void setSourceTimestamp(long sourceTimestamp) {
+        this.sourceTimestamp = sourceTimestamp;
+    }
+
+    public long getServerTimestamp() {
+        return serverTimestamp;
+    }
+
+    public void setServerTimestamp(long serverTimestamp) {
+        this.serverTimestamp = serverTimestamp;
+    }
+
+    public long getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(long statusCode) {
+        this.statusCode = statusCode;
+    }
+
 }
