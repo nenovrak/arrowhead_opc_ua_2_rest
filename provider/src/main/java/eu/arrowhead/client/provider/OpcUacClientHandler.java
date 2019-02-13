@@ -5,11 +5,13 @@ package eu.arrowhead.client.provider;
 
 import eu.arrowhead.client.common.model.OPCVariableReadout;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
+import org.eclipse.milo.opcua.sdk.client.api.nodes.Node;
 import org.eclipse.milo.opcua.sdk.client.api.nodes.VariableNode;
 import org.eclipse.milo.opcua.stack.core.types.builtin.DataValue;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
@@ -22,7 +24,7 @@ public class OpcUacClientHandler {
 
     private OpcUaClient client;
 
-    private Map<String, VariableNode> nodes = new HashMap();
+    private Map<String, VariableNodeHandler> nodes = new HashMap();
 
     public OpcUacClientHandler(OpcUaClient client) {
         this.client = client;
@@ -30,9 +32,9 @@ public class OpcUacClientHandler {
     
     OPCVariableReadout readNode(NodeId nodeId) throws InterruptedException, ExecutionException {
         String id = nodeId.toParseableString();
-        VariableNode node = nodes.get(id);
+        VariableNodeHandler node = nodes.get(id);
         if(node == null){
-            node = client.getAddressSpace().createVariableNode(nodeId);
+            node = createVariableHandler(nodeId);
             nodes.put(id, node);
         }
         // synchronous read request via VariableNode
@@ -40,15 +42,23 @@ public class OpcUacClientHandler {
         return vr;
     } 
     
-    private OPCVariableReadout readNode(VariableNode node) throws InterruptedException, ExecutionException{
+    private VariableNodeHandler createVariableHandler(NodeId nodeId) throws InterruptedException, ExecutionException{
+            VariableNode node = client.getAddressSpace().createVariableNode(nodeId);
+            NodeId dataTypeId = node.getDataType().get();
+            List<Node> typeNodes = client.getAddressSpace().browse(dataTypeId).get();
+            String type = "undefined";
+            if(!typeNodes.isEmpty()){
+                type = typeNodes.get(0).getBrowseName().get().toString();
+            }
+            return new VariableNodeHandler(node, type);
+    }
+    
+    private OPCVariableReadout readNode(VariableNodeHandler node) throws InterruptedException, ExecutionException{
         
-        DataValue value = node.readValue().get();
+        DataValue value = node.getNode().readValue().get();
         OPCVariableReadout vr = new OPCVariableReadout();
-        vr.setType("null");
+        vr.setType(node.getType());
         vr.setValue("null");
-        if (value.getValue().getDataType().isPresent()) {
-            vr.setType(value.getValue().getDataType().get().toParseableString());
-        }
         if (value.getValue().isNotNull()) {
             vr.setValue(value.getValue().getValue().toString());
         }
