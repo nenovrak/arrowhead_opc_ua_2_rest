@@ -29,34 +29,30 @@ public class OpcUacClientHandler {
     public OpcUacClientHandler(OpcUaClient client) {
         this.client = client;
     }
-    
+
     OPCVariableReadout readNode(NodeId nodeId) throws InterruptedException, ExecutionException {
         String id = nodeId.toParseableString();
         VariableNodeHandler node = nodes.get(id);
-        if(node == null){
+        if (node == null) {
             node = createVariableHandler(nodeId);
             nodes.put(id, node);
         }
         // synchronous read request via VariableNode
         OPCVariableReadout vr = readNode(node);
         return vr;
-    } 
-    
-    private VariableNodeHandler createVariableHandler(NodeId nodeId) throws InterruptedException, ExecutionException{
-            VariableNode node = client.getAddressSpace().createVariableNode(nodeId);
-            NodeId dataTypeId = node.getDataType().get();
-			System.out.println("DATA TYPE: " + dataTypeId.toParseableString());
-            Node typeNode = client.getAddressSpace().createDataTypeNode(dataTypeId);
-            String type = "undefined";
-			//System.out.println("Count: " + typeNodes.size());
-            //if(!typeNodes.isEmpty()){
-                type = typeNode.getBrowseName().get().getName();
-            //}
-            return new VariableNodeHandler(node, type);
     }
-    
-    private OPCVariableReadout readNode(VariableNodeHandler node) throws InterruptedException, ExecutionException{
-        
+
+    private VariableNodeHandler createVariableHandler(NodeId nodeId) throws InterruptedException, ExecutionException {
+        VariableNode node = client.getAddressSpace().createVariableNode(nodeId);
+        NodeId dataTypeId = node.getDataType().get();
+        Node typeNode = client.getAddressSpace().createDataTypeNode(dataTypeId);
+        String type = "undefined";
+        type = typeNode.getBrowseName().get().getName();
+        return new VariableNodeHandler(node, type);
+    }
+
+    private OPCVariableReadout readNode(VariableNodeHandler node) throws InterruptedException, ExecutionException {
+
         DataValue value = node.getNode().readValue().get();
         OPCVariableReadout vr = new OPCVariableReadout();
         vr.setType(node.getType());
@@ -70,8 +66,8 @@ public class OpcUacClientHandler {
         vr.setStatusCode(value.getStatusCode().getValue());
         return vr;
     }
-    
-    void disconnect(){
+
+    void disconnect() {
         try {
             client.disconnect().get();
             client = null;
