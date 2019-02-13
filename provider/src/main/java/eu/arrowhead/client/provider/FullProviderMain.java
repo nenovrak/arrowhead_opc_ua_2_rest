@@ -144,10 +144,10 @@ public class FullProviderMain extends ArrowheadClientMain {
     if (fromFile) {
       String srPath = props.getProperty("sr_entry");
       srEntry = Utility.fromJson(Utility.loadJsonFromFile(srPath), ServiceRegistryEntry.class);
-      if (NEED_AUTH) {
+      /*if (NEED_AUTH) {
         String authPath = props.getProperty("auth_entry");
         authEntry = Utility.fromJson(Utility.loadJsonFromFile(authPath), IntraCloudAuthEntry.class);
-      }
+      }*/
       if (NEED_ORCH) {
         String storePath = props.getProperty("store_entry");
         storeEntry = Arrays.asList(Utility.fromJson(Utility.loadJsonFromFile(storePath), OrchestrationStore[].class));
