@@ -17,5 +17,5 @@ This is a multi module maven project, hereby the lists of all the modules and co
 
 ### Authors
 
-Niklas Karvonen - Luleå University of Technology (Github: nenovrak) . 
+Niklas Karvonen - Luleå University of Technology (Github: nenovrak) 
 Diego Rovere TTS Network ()
