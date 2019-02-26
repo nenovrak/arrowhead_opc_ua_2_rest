@@ -19,4 +19,4 @@ This is a multi module maven project, hereby the lists of all the modules and co
 
 Niklas Karvonen - Luleå University of Technology (Github: nenovrak)
 
-Diego Rovere TTS Network ()
+Diego Rovere TTS Network (Github: oak377)
