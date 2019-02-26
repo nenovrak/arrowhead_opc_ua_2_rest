@@ -1,0 +1,157 @@
+\documentclass[a4paper]{arrowhead}
+
+\usepackage[utf8]{inputenc}
+\usepackage[table]{xcolor}
+\usepackage[yyyymmdd]{datetime}
+\usepackage{multirow}
+
+\renewcommand{\dateseparator}{-}
+
+\definecolor{InterfacePurple}{HTML}{401266}
+\definecolor{RecordBlue}{HTML}{124966}
+
+\newcommand{\iref}[1]{\texttt{\textcolor{InterfacePurple}{\hyperref[sec:interfaces:#1]{#1}}}}
+\newcommand{\mref}[1]{\texttt{\textcolor{RecordBlue}{\hyperref[sec:model:#1]{#1}}}}
+\newcommand{\pref}[1]{\texttt{\textcolor{RecordBlue}{\hyperref[sec:model:primitive]{#1}}}}
+
+\begin{document}
+
+%% Arrowhead Document Properties
+\ArrowheadTitle{OPC-UA-2REST Provider --- IDD}
+\ArrowheadType{PUBLIC}
+\ArrowheadVersion{0.1}
+\ArrowheadDate{\today}
+\ArrowheadAuthor{Emanuel Palm}
+\ArrowheadStatus{DRAFT}
+\ArrowheadContact{emanuel.palm@ltu.se}
+\ArrowheadFooter{\href{www.arrowhead.eu}{www.arrowhead.eu}}
+\ArrowheadSetup
+%%
+
+%% Front Page
+\begin{center}
+  \vspace*{1cm}
+  \LARGE{\arrowtitle}
+  \vspace*{1cm}
+  \vspace*{\fill}
+
+  % Front Page Image
+  %\includegraphics[width=\linewidth]{fig/services_broker_small}
+
+  \vspace*{1cm}
+  \vspace*{\fill}
+
+  % Front Page Abstract
+  \begin{abstract}
+        This document provides the description of a proof-of-concept OPC-UA to RESTful Provider for the Arrowhead framework. The system allows a developer to read UPC-UA variables using a RESTful interface and JSON. 
+  \end{abstract}
+
+  \vspace*{1cm}
+
+  \scriptsize
+  \begin{tabularx}{\textwidth}{l X}
+    \raisebox{-0.5\height}{\includegraphics[width=2cm]{fig/artemis_logo}} & {ARTEMIS Innovation Pilot Project: Arrowhead\newline
+    THEME [SP1-JTI-ARTEMIS-2012-AIPP4 SP1-JTI-ARTEMIS-2012-AIPP6]\newline
+    [Production and Energy System Automation Intelligent-Built environment and urban infrastructure for sustainable and friendly cities]}
+  \end{tabularx}
+  \vspace*{-0.2cm}
+\end{center}
+\newpage
+%%
+
+%% Table of Contents
+\tableofcontents
+\newpage
+%%
+
+\section{Overview}
+\label{sec:overview}
+
+This document contains a concrete description of the service related to the OPC-UA-2-REST Provider.
+The reader is assumed to be familiar with RESTful API:s and JSON format. 
+
+\vspace*{\baselineskip}
+
+\subsection{Interface Rules}
+The Client must always provide the \textit{OPC-UA variable name, namespace, and IP:port of the endpoint}, to the OPC-UA-REST provider.
+
+
+\section{Service Interfaces}
+\subsection{Read OPC-UA variable}
+\label{sec:interfaces:BrokeringStore}
+
+This interface responds with \texttt{200 OK} if a given request is successful.
+
+\paragraph{Query Parameters}
+The functions of this service interface accept input as HTTP URL parameters. An example of a request and a response is given in Listings \ref{lst:req} and \ref{lst:res}.
+
+\begin{lstlisting}[language=http,caption={A request example. A possible response is given in Listing \ref{lst:res}.},label={lst:req}]
+GET opcVariable/10.48.134.10:4840/3/%22xBG5%22 HTTP/1.1
+Accept: application/json
+\end{lstlisting}
+
+\begin{lstlisting}[language=http,caption={A request-response example.},label={lst:res}]
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "name": bXG5,
+  "value": true,
+  "type": boolean,
+  "timstamp": 123456789,
+}
+\end{lstlisting}
+
+\newpage
+
+\newpage
+
+\subsection{Primitive Types and Structures}
+\label{sec:model:primitive}
+
+\begin{table}[h]
+\begin{tabularx}{\textwidth}{| p{2.75cm} | X |} \hline
+\rowcolor{gray!33} Type & Description \\ \hline
+
+\pref{JSON}              & A JSON object. \\ \hline
+\pref{Unix timestamp}    & A Unix timestamp \\ \hline
+\pref{query}           & A URL string where variables are separated with "/". \\ \hline
+
+\end{tabularx}
+\caption{Primitive types.}
+\label{tab:model:primitive-1}
+\end{table}
+
+\begin{table}[h]
+\begin{tabularx}{\textwidth}{| p{2.75cm} | X |} \hline
+\rowcolor{gray!33} Structure & Description \\ \hline
+
+\texttt{Map<A, B>}           & A JSON object with keys of type \texttt{A} and values of type \texttt{B}. \\ \hline
+
+\end{tabularx}
+\caption{Primitive structures.}
+\label{tab:model:primitive-2}
+\end{table}
+
+\newpage
+
+\section{Revision History}
+\subsection{Amendments}
+
+\noindent\begin{tabularx}{\textwidth}{| p{1cm} | p{3cm} | p{2cm} | X | p{4cm} |} \hline
+\rowcolor{gray!33} No. & Date & Version & Subject of Amendments & Author \\ \hline
+
+1 & & & & \\ \hline
+
+\end{tabularx}
+
+\subsection{Quality Assurance}
+
+\noindent\begin{tabularx}{\textwidth}{| p{1cm} | p{3cm} | p{2cm} | X |} \hline
+\rowcolor{gray!33} No. & Date & Version & Approved by \\ \hline
+
+1 & & & \\ \hline
+
+\end{tabularx}
+
+\end{document}
